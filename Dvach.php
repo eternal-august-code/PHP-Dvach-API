@@ -1,29 +1,25 @@
 <?php
 
-class Dvach {
-    
-    public $board;
+include_once "ImageboardParser.php";
+
+class Dvach extends ImageboardParser {
+    public function setBoard($board) {
+        $this->board = $board;
+        $this->url = "https://2ch.hk/".$this->board."/";
+    }
 
     function __construct($board) {
-        $this->board = $board;
+        parent::__construct($board);
     }
 
-    private function getJson($url) {
-        $ch = curl_init($url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        $result = json_decode(curl_exec($ch), true);
-        curl_close($ch);
-        return $result;
-    }
-
-    function getThreadList(array $filter=[]) {
+    public function getThreadList(array $filter=[]) {
         $threadsArray = [];
-        foreach (getJson("https://2ch.hk/".$this->board."/threads.json")["threads"] as $thread) {
+        foreach ($this->getJson($this->url."/threads.json")["threads"] as $thread) {
             array_push($threadsArray, $thread);
         }
         if (count($filter) != 0) {
             $filteredThreadsArray = [];
-            foreach (getThreadList($board) as $thread) {
+            foreach ($this->getThreadList() as $thread) {
                 foreach ($filter as $word) {
                     if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
                 }
@@ -32,13 +28,13 @@ class Dvach {
         } else return $threadsArray;
     }
     
-    function getThread($num) {
-        return getJson("https://2ch.hk/".$this->board."/res/".$num.".json");
+    public function getThread($num) {
+        return $this->getJson($this->url."/res/".$num.".json");
     }
 
-    function getThreadFiles($num, $type="") {
+    public function getThreadFiles($num, $type="") {
         $filesArray = [];
-        foreach (getThread($this->board, $num)["threads"][0]["posts"] as $post) {
+        foreach ($this->getThread($this->board, $num)["threads"][0]["posts"] as $post) {
             foreach ($post["files"] as $file) {
                 if (array_key_exists("md5", $file)) $filesArray[$file["md5"]] = $file;
             }
