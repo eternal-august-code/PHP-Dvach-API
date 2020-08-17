@@ -11,22 +11,6 @@ class Dvach extends ImageboardParser {
     function __construct($board) {
         parent::__construct($board);
     }
-
-    public function getThreadList(array $filter=[]) {
-        $threadsArray = [];
-        foreach ($this->getJson($this->url."/threads.json")["threads"] as $thread) {
-            array_push($threadsArray, $thread);
-        }
-        if (count($filter) != 0) {
-            $filteredThreadsArray = [];
-            foreach ($this->getThreadList() as $thread) {
-                foreach ($filter as $word) {
-                    if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
-                }
-            }
-            return array_values($filteredThreadsArray);
-        } else return $threadsArray;
-    }
     
     public function getThread($num) {
         return $this->getJson($this->url."/res/".$num.".json");
@@ -34,7 +18,7 @@ class Dvach extends ImageboardParser {
 
     public function getThreadFiles($num, $type="") {
         $filesArray = [];
-        foreach ($this->getThread($this->board, $num)["threads"][0]["posts"] as $post) {
+        foreach ($this->getThread($num)["threads"][0]["posts"] as $post) {
             foreach ($post["files"] as $file) {
                 if (array_key_exists("md5", $file)) $filesArray[$file["md5"]] = $file;
             }
@@ -57,3 +41,8 @@ class Dvach extends ImageboardParser {
         }
     }
 }
+
+
+$dvach = new Dvach("b");
+
+dump( $dvach->getCatalog() );

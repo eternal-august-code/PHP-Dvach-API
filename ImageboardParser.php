@@ -1,5 +1,9 @@
 <?php
-
+function dump($var) {
+    echo "<pre>";
+    var_dump($var);
+    echo "</pre>";
+}
 abstract class ImageboardParser {
     protected $board;
     protected $url;
@@ -21,7 +25,26 @@ abstract class ImageboardParser {
         return $result;
     }
     
-    abstract function getThreadList(array $filter=[]);
+    // public function getCatalog(array $filter=[]) {
+    //     $threadsArray = [];
+    //     foreach ($this->getJson($this->url."/catalog.json")["threads"] as $thread) {
+    //         array_push($threadsArray, $thread);
+    //     }
+    //     if (count($filter) != 0) {
+    //         $filteredThreadsArray = [];
+    //         foreach ($this->getCatalog() as $thread) {
+    //             foreach ($filter as $word) {
+    //                 if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
+    //             }
+    //         }
+    //         return array_values($filteredThreadsArray);
+    //     } else return $threadsArray;
+    // }
+
+    public function getCatalog() {
+        return $this->getJson($this->url."/catalog.json");
+    }
+    
     abstract function getThread($num);
-    abstract function getThreadFiles($num, $type="");
+    abstract function getThreadFiles($num);
 }
