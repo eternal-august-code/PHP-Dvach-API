@@ -1,8 +1,8 @@
 <?php
 
-include_once "ImageboardParser.php";
+include_once "VichanBase.php";
 
-class Dvach extends ImageboardParser {
+class Dvach extends VichanBase {
     public function setBoard($board) {
         $this->board = $board;
         $this->url = "https://2ch.hk/".$this->board."/";
@@ -14,21 +14,8 @@ class Dvach extends ImageboardParser {
     
     public function getThreadList(array $filter=[]) {
         $threadList = $this->getCatalog()["threads"];
-        if (count($filter) != 0) {
-            $filteredThreadsArray = [];
-            foreach ($threadList as $thread) {
-                foreach ($filter as $word) {
-                    if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
-                }
-            }
-            return array_values($filteredThreadsArray);
-        } 
-        // $this->filterThreadList($threadList, "subject", $filter);
-        // else return $threadList;
-    }
-
-    public function getThread($num) {
-        return $this->getJson($this->url."/res/".$num.".json");
+        if (count($filter) != 0) return $this->filterThreadList($threadList, "subject", $filter, "num");
+        return $threadList;
     }
 
     public function getThreadFiles($num, $type="") {
@@ -60,4 +47,5 @@ class Dvach extends ImageboardParser {
 
 $dvach = new Dvach("b");
 
-dump( $dvach->getThreadList(["фап"]) );
+// dump( $dvach->getThreadList(["Нуждаюсь"]) );
+dump( $dvach->getThread("227098059") );

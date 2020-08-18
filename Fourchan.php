@@ -1,8 +1,8 @@
 <?php
 
-include_once "ImageboardParser.php";
+include_once "VichanBase.php";
 
-class Fourchan extends ImageboardParser {
+class Fourchan extends VichanBase {
     public function setBoard($board) {
         $this->board = $board;
         $this->url = "https://a.4cdn.org/".$this->board."/";
@@ -20,12 +20,8 @@ class Fourchan extends ImageboardParser {
                 array_push($threadList, $thread);
             }
         }
-        if (count($filter) != 0) $this->filterThreadList($threadList, "subject", $filter);
+        if (count($filter) != 0) return $this->filterThreadList($threadList, "com", $filter, "no");
         return $threadList;
-    }
-
-    public function getThread($num) {
-
     }
 
     public function getThreadFiles($num) {
@@ -35,4 +31,5 @@ class Fourchan extends ImageboardParser {
 
 $fourch = new Fourchan("b");
 
-dump( $fourch->getCatalog() );
+// dump( $fourch->getThreadList(['seX']) );
+dump( $fourch->getThread("834453613") );
