@@ -12,6 +12,18 @@ class Fourchan extends ImageboardParser {
         parent::__construct($board);
     }
         
+    public function getThreadList(array $filter=[]) {
+        $catalog = $this->getCatalog();
+        $threadList = [];
+        for ($i=0; $i < count($catalog); $i++) { 
+            foreach ($catalog[$i]["threads"] as $thread) {
+                array_push($threadList, $thread);
+            }
+        }
+        if (count($filter) != 0) $this->filterThreadList($threadList, "subject", $filter);
+        return $threadList;
+    }
+
     public function getThread($num) {
 
     }

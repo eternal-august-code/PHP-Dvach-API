@@ -12,6 +12,21 @@ class Dvach extends ImageboardParser {
         parent::__construct($board);
     }
     
+    public function getThreadList(array $filter=[]) {
+        $threadList = $this->getCatalog()["threads"];
+        if (count($filter) != 0) {
+            $filteredThreadsArray = [];
+            foreach ($threadList as $thread) {
+                foreach ($filter as $word) {
+                    if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
+                }
+            }
+            return array_values($filteredThreadsArray);
+        } 
+        // $this->filterThreadList($threadList, "subject", $filter);
+        // else return $threadList;
+    }
+
     public function getThread($num) {
         return $this->getJson($this->url."/res/".$num.".json");
     }
@@ -45,4 +60,4 @@ class Dvach extends ImageboardParser {
 
 $dvach = new Dvach("b");
 
-dump( $dvach->getCatalog() );
+dump( $dvach->getThreadList(["фап"]) );

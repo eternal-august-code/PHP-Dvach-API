@@ -25,26 +25,23 @@ abstract class ImageboardParser {
         return $result;
     }
     
-    // public function getCatalog(array $filter=[]) {
-    //     $threadsArray = [];
-    //     foreach ($this->getJson($this->url."/catalog.json")["threads"] as $thread) {
-    //         array_push($threadsArray, $thread);
-    //     }
-    //     if (count($filter) != 0) {
-    //         $filteredThreadsArray = [];
-    //         foreach ($this->getCatalog() as $thread) {
-    //             foreach ($filter as $word) {
-    //                 if (stripos(mb_strtolower($thread["subject"]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
-    //             }
-    //         }
-    //         return array_values($filteredThreadsArray);
-    //     } else return $threadsArray;
-    // }
-
     public function getCatalog() {
-        return $this->getJson($this->url."/catalog.json");
+        return ($this->getJson($this->url."/catalog.json"));
     }
-    
+
+    protected function filterThreadList(array $threadList, string $key, array $filter) {
+        $filteredThreadsArray = [];
+        foreach ($threadList as $thread) {
+            foreach ($filter as $word) {
+                if (stripos(mb_strtolower($thread[$key]), $word) !== false ) $filteredThreadsArray[$thread["num"]] = $thread;
+            }
+        }
+        return array_values($filteredThreadsArray);
+    }
+
+
+
+    abstract function getThreadList();
     abstract function getThread($num);
     abstract function getThreadFiles($num);
 }
