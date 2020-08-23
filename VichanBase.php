@@ -38,8 +38,10 @@ abstract class VichanBase {
     protected function filterThreadList(array $threadList, string $key, array $filter, string $uniqueKey) {
         $filteredThreadsArray = [];
         foreach ($threadList as $thread) {
-            foreach ($filter as $word) {
-                if (stripos(mb_strtolower($thread[$key]), mb_strtolower($word)) !== false ) $filteredThreadsArray[$thread[$uniqueKey]] = $thread;
+            if (array_key_exists($key, $thread)) {
+                foreach ($filter as $word) {
+                    if (stripos(mb_strtolower($thread[$key]), mb_strtolower($word)) !== false ) $filteredThreadsArray[$thread[$uniqueKey]] = $thread;
+                }
             }
         }
         return array_values($filteredThreadsArray);

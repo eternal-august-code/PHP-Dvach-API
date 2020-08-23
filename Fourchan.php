@@ -29,7 +29,13 @@ class Fourchan extends VichanBase {
     }
 }
 
-$fourch = new Fourchan("b");
+$fourch = new Fourchan("s");
 
-// dump( $fourch->getThreadList(['seX']) );
-dump( $fourch->getThread("834453613") );
+// dump( $fourch->getThreadList(['fap']) );
+// dump( $fourch->getThread("19749508") );
+
+$arr = $fourch->getThread("19749508");
+
+foreach ($arr as $key => $value) {
+    echo $key;
+}

@@ -47,5 +47,11 @@ class Dvach extends VichanBase {
 
 $dvach = new Dvach("b");
 
-// dump( $dvach->getThreadList(["Нуждаюсь"]) );
-dump( $dvach->getThread("227098059") );
+// dump( $dvach->getThreadList(["хУЙ"]) );
+// dump( $dvach->getThread("227098059") );
+
+$arr = $dvach->getThread("227098059");
+
+foreach ($arr as $key => $value) {
+    echo $key;
+}
